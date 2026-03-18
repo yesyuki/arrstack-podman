@@ -1,0 +1,24 @@
+[Unit]
+Description=Prowlarr Container Service
+After=network-online.target
+
+[Container]
+Image=ghcr.io/hotio/prowlarr:latest
+ContainerName=prowlarr
+Environment=PUID=0
+Environment=PGID=0
+Environment=TZ=(your timezone)
+Volume=prowlarr_config:/config:Z
+PublishPort=9696:9696
+Network=arr
+
+AutoUpdate=registry
+Label=io.containers.autoupdate=registry
+
+HealthCmd=curl -f http://localhost:9696 || exit 1
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=default.target
