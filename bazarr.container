@@ -1,0 +1,26 @@
+[Unit]
+Description=Bazarr Container Service
+After=network-online.target
+
+[Container]
+Image=ghcr.io/hotio/bazarr:latest
+ContainerName=bazarr
+Environment=PUID=0
+Environment=PGID=0
+Environment=TZ=(your timezone)
+Volume=/etc/localtime:/etc/localtime:ro
+Volume=bazarr_config:/config:Z
+Volume=(path to data/media):/data/media:z
+PublishPort=6767:6767
+Network=arr
+
+AutoUpdate=registry
+Label=io.containers.autoupdate=registry
+
+HealthCmd=curl -f http://localhost:6767 || exit 1
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=default.target
