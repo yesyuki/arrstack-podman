@@ -1,0 +1,26 @@
+[Unit]
+Description=Radarr Container Service
+After=network-online.target
+
+[Container]
+Image=ghcr.io/hotio/radarr:latest
+ContainerName=radarr
+Environment=PUID=0
+Environment=PGID=0
+Environment=TZ=(your timezone)
+Volume=/etc/localtime:/etc/localtime:ro
+Volume=radarr_config:/config:Z
+Volume=(path to /data):/data:z
+PublishPort=7878:7878
+Network=arr
+
+AutoUpdate=registry
+Label=io.containers.autoupdate=registry
+
+HealthCmd=curl -f http://localhost:7878 || exit 1
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=default.target
