@@ -1,0 +1,28 @@
+[Unit]
+Description=Qbittorrent Container Service
+
+[Container]
+Image=lscr.io/linuxserver/qbittorrent:latest
+ContainerName=qbittorrent
+Environment=PUID=0
+Environment=PGID=0
+Environment=TZ=(your timezone)
+Environment=WEBUI_PORT=8080
+Environment=TORRENTING_PORT=6881
+Volume=qbittorrent_config:/config:Z
+Volume=(path to /data):/data:z
+PublishPort=8080:8080/tcp
+PublishPort=6881:6881/tcp
+PublishPort=6881:6881/udp
+Network=arr
+
+AutoUpdate=registry
+Label=io.containers.autoupdate=registry
+
+HealthCmd=curl -f http://localhost:8080 || exit 1
+
+[Service]
+Restart=on-failure
+
+[Install]
+WantedBy=default.target
