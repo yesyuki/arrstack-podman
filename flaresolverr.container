@@ -1,0 +1,23 @@
+[Unit]
+Description=FlareSolverr Container Service
+After=network-online.target
+
+[Container]
+Image=ghcr.io/flaresolverr/flaresolverr:latest
+ContainerName=flaresolverr
+Environment=LOG_LEVEL=info
+Environment=TZ=(your timezone)
+Volume=flaresolverr_config:/config:Z
+PublishPort=8191:8191
+Network=arr
+
+AutoUpdate=registry
+Label=io.containers.autoupdate=registry
+
+HealthCmd=curl -f http://localhost:8191 || exit 1
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=default.target
